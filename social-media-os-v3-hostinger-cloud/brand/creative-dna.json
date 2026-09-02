@@ -1,0 +1,34 @@
+{
+  "brand": "TechAIrevolution",
+  "handle": "@techairevolution",
+  "preferred_direction_prior": ["clean_light_editorial", "hybrid_editorial"],
+  "performance_goals": ["shares", "saves", "profile_visits", "authority"],
+  "principles": [
+    "Use references as quality/composition/typography intelligence, not rigid templates.",
+    "Prefer one memorable visual idea per slide.",
+    "Typography must be intentional, mobile-first and confident.",
+    "Use light, dark, photography, CGI, surreal, collage or experimental directions when they are exceptional and story-fit.",
+    "Do not default to generic AI visual language.",
+    "Maintain a coherent campaign system while allowing slide-level variation.",
+    "The cover gets the most candidate generation and the strictest quality threshold."
+  ],
+  "avoid_when_generic": [
+    "glowing AI brains",
+    "meaningless neural-network wallpaper",
+    "random holographic dashboards",
+    "decorative cyberpunk clutter",
+    "generic stock-style AI imagery",
+    "six identical layouts"
+  ],
+  "typography": {
+    "hero": "Archivo Black",
+    "secondary": "League Spartan",
+    "body": "Inter",
+    "meta": "IBM Plex Sans Condensed SemiBold",
+    "editorial_accent": "Instrument Serif Italic"
+  },
+  "formats": {
+    "carousel": {"aspect_ratio": "4:5", "slides": 6},
+    "reel": {"aspect_ratio": "9:16"}
+  }
+}

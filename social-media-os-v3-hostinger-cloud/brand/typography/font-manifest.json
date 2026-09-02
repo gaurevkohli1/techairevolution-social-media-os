@@ -1,0 +1,10 @@
+{
+  "required_private_font_files": [
+    {"family": "Instrument Serif", "style": "Italic", "filename": "InstrumentSerif-Italic.ttf"},
+    {"family": "Archivo Black", "style": "Regular", "filename": "ArchivoBlack-Regular.ttf"},
+    {"family": "League Spartan", "style": "Regular", "filename": "LeagueSpartan.ttf"},
+    {"family": "Inter", "style": "Regular", "filename": "Inter.ttf"},
+    {"family": "IBM Plex Sans Condensed", "style": "SemiBold", "filename": "IBMPlexSansCondensed-SemiBold.ttf"}
+  ],
+  "note": "Font binaries are intentionally excluded from this package. Upload your licensed copies privately to the Hostinger app."
+}

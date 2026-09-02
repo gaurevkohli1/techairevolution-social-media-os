@@ -1,0 +1,13 @@
+{
+  "package": "Social Media OS V3 Hostinger Cloud Edition",
+  "version": "0.1.0",
+  "required_files": 14,
+  "missing_files": [],
+  "reference_images_packaged": 5,
+  "logo_packaged": true,
+  "font_binaries_included": false,
+  "secret_env_included": false,
+  "live_meta_default": false,
+  "autopilot_default": false,
+  "status": "FOUNDATION_READY_FOR_GITHUB_AND_HOSTINGER_SMOKE_TEST"
+}
