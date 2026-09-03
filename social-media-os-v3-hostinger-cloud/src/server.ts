@@ -1,6 +1,5 @@
 import express from "express";
 import helmet from "helmet";
-import pinoHttp from "pino-http";
 import { db } from "./db.js";
 import { config } from "./config.js";
 import { logger } from "./logger.js";
@@ -8,50 +7,66 @@ import { cronGuard, basicGuard } from "./security.js";
 import { tick } from "./core/tick.js";
 
 const app = express();
+
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: "1mb" }));
-app.use(pinoHttp({ logger }));
 
-app.get("/health", async (_req,res) => {
+app.use((req, _res, next) => {
+  logger.info(
+    { method: req.method, path: req.path },
+    "http request"
+  );
+  next();
+});
+
+app.get("/health", async (_req, res) => {
   try {
     await db.query("SELECT 1");
     res.json({
-      ok:true,
-      app:"TechAIrevolution Social Media OS V3",
-      autopilot:config.AUTOPILOT_ENABLED,
-      metaWrites:config.META_WRITE_ENABLED,
-      timezone:config.APP_TIMEZONE,
-      publishTime:config.PUBLISH_TIME_LOCAL,
-      secretsPrinted:false
+      ok: true,
+      app: "TechAIrevolution Social Media OS V3",
+      autopilot: config.AUTOPILOT_ENABLED,
+      metaWrites: config.META_WRITE_ENABLED,
+      timezone: config.APP_TIMEZONE,
+      publishTime: config.PUBLISH_TIME_LOCAL,
+      secretsPrinted: false
     });
   } catch {
-    res.status(503).json({ok:false});
+    res.status(503).json({ ok: false });
   }
 });
 
-app.post("/internal/tick", cronGuard, async (_req,res) => {
+app.post("/internal/tick", cronGuard, async (_req, res) => {
   const result = await tick();
   res.json(result);
 });
 
-app.get("/api/status", basicGuard, async (_req,res) => {
+app.get("/api/status", basicGuard, async (_req, res) => {
   const [campaigns] = await db.query<any[]>(
     "SELECT campaign_key,local_date,status,story_title,target_publish_at_utc,failure_code,updated_at FROM campaigns ORDER BY id DESC LIMIT 20"
   );
+
   res.json({
-    autopilot:config.AUTOPILOT_ENABLED,
-    metaWrites:config.META_WRITE_ENABLED,
-    publishTime:config.PUBLISH_TIME_LOCAL,
-    timezone:config.APP_TIMEZONE,
+    autopilot: config.AUTOPILOT_ENABLED,
+    metaWrites: config.META_WRITE_ENABLED,
+    publishTime: config.PUBLISH_TIME_LOCAL,
+    timezone: config.APP_TIMEZONE,
     campaigns
   });
 });
 
-app.get("/", basicGuard, async (_req,res) => {
+app.get("/", basicGuard, async (_req, res) => {
   const [campaigns] = await db.query<any[]>(
     "SELECT campaign_key,status,story_title,updated_at FROM campaigns ORDER BY id DESC LIMIT 10"
   );
-  const rows = campaigns.map(c => `<tr><td>${c.campaign_key}</td><td>${c.status}</td><td>${c.story_title||""}</td><td>${c.updated_at}</td></tr>`).join("");
+
+  const rows = campaigns
+    .map(
+      c =>
+        `<tr><td>${c.campaign_key}</td><td>${c.status}</td><td>${c.story_title || ""}</td><td>${c.updated_at}</td></tr>`
+    )
+    .join("");
+
   res.type("html").send(`<!doctype html>
   <html><head><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>TechAIrevolution Social Media OS</title>
@@ -64,8 +79,8 @@ app.get("/", basicGuard, async (_req,res) => {
   </style></head><body><div class="wrap">
   <h1>Tech<span class="accent">AI</span>revolution — Social Media OS V3</h1>
   <div class="card">
-  <span class="pill">Autopilot: ${config.AUTOPILOT_ENABLED ? "ON":"OFF"}</span>
-  <span class="pill">Meta writes: ${config.META_WRITE_ENABLED ? "ON":"OFF"}</span>
+  <span class="pill">Autopilot: ${config.AUTOPILOT_ENABLED ? "ON" : "OFF"}</span>
+  <span class="pill">Meta writes: ${config.META_WRITE_ENABLED ? "ON" : "OFF"}</span>
   <span class="pill">Target: ${config.PUBLISH_TIME_LOCAL} ${config.APP_TIMEZONE}</span>
   </div>
   <div class="card"><h2>Recent campaigns</h2>
@@ -74,5 +89,5 @@ app.get("/", basicGuard, async (_req,res) => {
 });
 
 app.listen(config.PORT, () => {
-  logger.info({port:config.PORT}, "Social Media OS V3 listening");
+  logger.info({ port: config.PORT }, "Social Media OS V3 listening");
 });

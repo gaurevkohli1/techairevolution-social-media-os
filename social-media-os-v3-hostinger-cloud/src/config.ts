@@ -1,7 +1,10 @@
 import "dotenv/config";
 import { z } from "zod";
 
-const boolString = z.enum(["true", "false"]).transform(v => v === "true");
+const boolString = z
+  .enum(["true", "false"])
+  .default("false")
+  .transform(v => v === "true");
 
 const schema = z.object({
   NODE_ENV: z.string().default("production"),
@@ -33,8 +36,10 @@ const schema = z.object({
   APP_TIMEZONE: z.string().default("Asia/Kolkata"),
   PUBLISH_TIME_LOCAL: z.string().regex(/^\d{2}:\d{2}$/).default("18:00"),
   PRODUCTION_LEAD_MINUTES: z.coerce.number().int().positive().default(120),
-  AUTOPILOT_ENABLED: boolString.default("false"),
-  META_WRITE_ENABLED: boolString.default("false"),
+
+  AUTOPILOT_ENABLED: boolString,
+  META_WRITE_ENABLED: boolString,
+
   CREATIVE_SCORE_MINIMUM: z.coerce.number().min(0).max(100).default(90),
   MAX_REPAIR_ROUNDS: z.coerce.number().int().min(0).max(5).default(3),
 
